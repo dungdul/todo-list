@@ -1,0 +1,35 @@
+{
+  "name": "webpack-template",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/dungdul/webpack-template#readme",
+  "bugs": {
+    "url": "https://github.com/dungdul/webpack-template/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dungdul/webpack-template.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-dependencies": "npm install -D webpack webpack-cli webpack-dev-server webpack-merge style-loader css-loader html-loader html-webpack-plugin gh-pages",
+    "start": "webpack serve --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "deploy": "gh-pages -d dist"
+  },
+  "devDependencies": {
+    "css-loader": "^7.1.4",
+    "gh-pages": "^6.3.0",
+    "html-loader": "^5.1.0",
+    "html-webpack-plugin": "^5.6.6",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.105.4",
+    "webpack-cli": "^7.0.2",
+    "webpack-dev-server": "^5.2.3",
+    "webpack-merge": "^6.0.1"
+  }
+}
