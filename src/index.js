@@ -20,6 +20,7 @@ class Project {
     this.id = crypto.randomUUID();
     this.title = title;
     this.todoItems = [];
+    this.archived = false;
   }
 
   addTodoItem(title, description, dueDate, priority) {
@@ -36,6 +37,10 @@ class Project {
 
   getTodoItem(todoItemId) {
     return this.todoItems.find(currentItem => currentItem.id === todoItemId);
+  }
+
+  toggleArchived() {
+    this.archived = !this.archived;
   }
 }
 
@@ -64,6 +69,7 @@ class Todo {
     this.projects.forEach((project, index) => {
       console.log(`Project ${index + 1}: ${project.title}`);
       console.log(`  ID: ${project.id}`);
+      console.log(`  Archived: ${project.archived}`);
       project.todoItems.forEach((todoItem, index) => {
         console.log(`  Item ${index + 1}: ${todoItem.title}`);
         console.log(`    ID: ${todoItem.id}`);
