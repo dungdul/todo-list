@@ -1,1 +1,48 @@
 @import "./css-reset.css";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  font-family: Roboto, --sans-serif;
+}
+
+body {
+  --sidebar-width: 300px;
+  --sidebar-color: #2E294E;
+  --sidebar-selected-color: #EFBCD5;
+  --sidebar-hovered-color: #BE97C6;
+
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+}
+
+.sidebar {
+  background-color: var(--sidebar-color);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.top-menu {
+  margin-top: 10vh;
+}
+
+.menu-button {
+  color: inherit;
+  background-color: inherit;
+  border: none;
+  width: 100%;
+  text-align: start;
+  padding: 8px calc(var(--sidebar-width) * 0.2);
+  font-size: 1.2rem;
+
+  &:hover {
+    background-color: var(--sidebar-hovered-color);
+  }
+
+  &.selected {
+    background-color: var(--sidebar-selected-color);
+    color: black;
+  }
+}
