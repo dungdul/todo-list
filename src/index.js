@@ -7,6 +7,11 @@ class TodoItem {
     this.description = description;
     this.dueDate = new Date(dueDate);
     this.priority = priority;
+    this.completed = false;
+  }
+
+  toggleCompleted() {
+    this.completed = !this.completed;
   }
 }
 
@@ -24,6 +29,10 @@ class Project {
   deleteTodoItem(todoItemId) {
     this.todoItems = this.todoItems.filter(currentItem => currentItem.id !== todoItemId);
   }
+
+  getTodoItem(todoItemId) {
+    return this.todoItems.find(currentItem => currentItem.id === todoItemId);
+  }
 }
 
 class Todo {
@@ -34,6 +43,8 @@ class Todo {
   addProject(projectTitle) {
     const project = new Project(projectTitle);
     this.projects.push(project);
+
+    // Return the project object so that it can be stored in a variable and can be accessed via console
     return project;
   }
 
@@ -49,6 +60,9 @@ class Todo {
     const todoItem = new TodoItem(title, description, dueDate, priority);
     const project = this.getProject(projectId);
     project.addTodoItem(todoItem);
+
+    // So that it can be accessed via console
+    return todoItem;
   }
 
   deleteTodoItemFromProject(projectId, todoItemId) {
@@ -57,7 +71,7 @@ class Todo {
 
   printTodoList() {
     this.projects.forEach((project, index) => {
-      console.log(`${index + 1}------------------------`);
+      console.log(`Project ${index + 1} ------------------------`);
       console.log(project.title);
       project.todoItems.forEach((todoItem, index) => {
         console.log(`${index + 1}-----`);
@@ -65,6 +79,7 @@ class Todo {
         console.log(todoItem.description);
         console.log(todoItem.dueDate);
         console.log(todoItem.priority);
+        console.log(`Completed: ${todoItem.completed}`);
       })
     })
   }
