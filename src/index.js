@@ -22,8 +22,12 @@ class Project {
     this.todoItems = [];
   }
 
-  addTodoItem(todoItem) {
+  addTodoItem(title, description, dueDate, priority) {
+    const todoItem = new TodoItem(title, description, dueDate, priority);
     this.todoItems.push(todoItem);
+
+    // Return the todo item so that it can ge stored in a variable and easily accessed when using console
+    return todoItem;
   }
 
   deleteTodoItem(todoItemId) {
@@ -54,19 +58,6 @@ class Todo {
 
   getProject(projectId) {
     return this.projects.find(currentProject => currentProject.id === projectId);
-  }
-
-  addTodoItemToProject(projectId, title, description, dueDate, priority) {
-    const todoItem = new TodoItem(title, description, dueDate, priority);
-    const project = this.getProject(projectId);
-    project.addTodoItem(todoItem);
-
-    // So that it can be accessed via console
-    return todoItem;
-  }
-
-  deleteTodoItemFromProject(projectId, todoItemId) {
-    this.getProject(projectId).deleteTodoItem(todoItemId);
   }
 
   printTodoList() {
