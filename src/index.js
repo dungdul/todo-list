@@ -62,15 +62,15 @@ class Todo {
 
   printTodoList() {
     this.projects.forEach((project, index) => {
-      console.log(`Project ${index + 1} ------------------------`);
-      console.log(project.title);
+      console.log(`Project ${index + 1}: ${project.title}`);
+      console.log(`  ID: ${project.id}`);
       project.todoItems.forEach((todoItem, index) => {
-        console.log(`${index + 1}-----`);
-        console.log(todoItem.title);
-        console.log(todoItem.description);
-        console.log(todoItem.dueDate);
-        console.log(todoItem.priority);
-        console.log(`Completed: ${todoItem.completed}`);
+        console.log(`  Item ${index + 1}: ${todoItem.title}`);
+        console.log(`    ID: ${todoItem.id}`);
+        console.log(`    ${todoItem.description}`);
+        console.log(`    ${todoItem.dueDate}`);
+        console.log(`    ${todoItem.priority}`);
+        console.log(`    Completed: ${todoItem.completed}`);
       })
     })
   }
