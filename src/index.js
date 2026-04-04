@@ -1,4 +1,3 @@
-import { nextWednesday } from 'date-fns';
 import './styles.css';
 
 class TodoItem {
@@ -123,14 +122,6 @@ class Todo {
   }
 }
 
-const todo = new Todo();
-todo.addProject('test 1');
-todo.addProject('test 3');
-const p2 = todo.addProject('test 2');
-p2.toggleArchived();
-const p4 = todo.addProject('test 4');
-p4.toggleArchived();
-
 function renderSidebar() {
   const projectContainerDiv = document.querySelector('.project-container');
   const dropdownDiv = document.querySelector('.dropdown');
@@ -164,16 +155,56 @@ function renderSidebar() {
   });
 }
 
-function renderPage(title, groups) {
+function renderProjectPage(project) {
   const headerH1 = document.querySelector('.header > h1');
+  const groupBySelect = document.querySelector('#group-by')
   const sectionContainerDiv = document.querySelector('.section-container');
 
-  headerH1.textContent = title;
+  headerH1.textContent = project.title;
 
-  
+  const groupBy = groupBySelect.value;
+  const groups = Todo.groupTodoItems(project.todoItems, groupBy)
+
+  // Create a section from each group
+  // Each section has a h2 title and a ul that contains todo items
+  groups.forEach(group => {
+    const sectionDiv = document.createElement('div');
+    sectionDiv.classList.add('section');
+    sectionContainerDiv.append(sectionDiv);
+
+    const sectionHeaderH2 = document.createElement('h2');
+    sectionHeaderH2.textContent = group.title;
+    sectionDiv.append(sectionHeaderH2);
+
+    const ul = document.createElement('ul');
+    sectionDiv.append(ul);
+
+    // Populate the ul with todo items
+    group.todoItems.forEach(item => {
+      const li = document.createElement('li');
+      ul.append(li);
+
+      // Checkbox
+      const checkboxContainerDiv = document.createElement('div');
+      checkboxContainerDiv.classList.add('checkbox-container');
+      li.append(checkboxContainerDiv);
+      const checkboxInput = document.createElement('input');
+      checkboxInput.type = 'checkbox';
+      checkboxContainerDiv.append(checkboxInput);
+
+      // Title
+      const titleP = document.createElement('p');
+      titleP.textContent = item.title;
+      li.append(titleP);
+
+      // Show priority or due date, depending on value of 'group by'
+      // If items are grouped by due date, show priority, and vice versa
+      const rightSideP = document.createElement('p');
+      rightSideP.textContent = groupBy === 'dueDate' ? `Priority: ${item.priority}` : item.dueDate;
+      li.append(rightSideP);
+    })
+  })
 }
-
-renderSidebar();
 
 window.todo = new Todo();
 window.Todo = Todo;
@@ -182,3 +213,8 @@ window.p1 = window.todo.addProject('p1');
 let t1 = p1.addTodoItem('thing 1', 'some blah', '2020-01-03', 'low');
 let t2 = p1.addTodoItem('thing 2', 'tnersitnareio', '2020-01-03', 'medium');
 let t3 = p1.addTodoItem('thing 3', 'arsnetio', '2025-02-01', 'low');
+
+let group = Todo.groupTodoItems(p1.todoItems, 'priority');
+
+renderSidebar();
+renderProjectPage(p1);
