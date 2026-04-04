@@ -63,6 +63,10 @@ body {
     border: 1px solid gray;
     border-radius: 8px;
     padding: 2px 8px;
+
+    &:hover {
+      background-color: rgb(238, 238, 238);
+    }
   }
 }
 
