@@ -161,12 +161,12 @@ function renderProjectPage(project) {
   const sectionContainerDiv = document.querySelector('.section-container');
 
   headerH1.textContent = project.title;
-
-  const groupBy = groupBySelect.value;
-  const groups = Todo.groupTodoItems(project.todoItems, groupBy)
-
+  sectionContainerDiv.textContent = '';
+  
   // Create a section from each group
   // Each section has a h2 title and a ul that contains todo items
+  const groupBy = groupBySelect.value;
+  const groups = Todo.groupTodoItems(project.todoItems, groupBy)
   groups.forEach(group => {
     const sectionDiv = document.createElement('div');
     sectionDiv.classList.add('section');
@@ -214,7 +214,9 @@ let t1 = p1.addTodoItem('thing 1', 'some blah', '2020-01-03', 'low');
 let t2 = p1.addTodoItem('thing 2', 'tnersitnareio', '2020-01-03', 'medium');
 let t3 = p1.addTodoItem('thing 3', 'arsnetio', '2025-02-01', 'low');
 
-let group = Todo.groupTodoItems(p1.todoItems, 'priority');
+window.p2 = window.todo.addProject('p2');
+window.p3 = window.todo.addProject('p3');
+window.p3.toggleArchived();
 
 renderSidebar();
 renderProjectPage(p1);
