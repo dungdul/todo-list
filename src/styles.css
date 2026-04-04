@@ -6,10 +6,12 @@
 }
 
 body {
-  --sidebar-width: 300px;
+  --sidebar-width: 250px;
   --sidebar-color: #2E294E;
   --sidebar-selected-color: #EFBCD5;
   --sidebar-hovered-color: #BE97C6;
+  --main-background-color: #FBEFF5;
+  --section-hovered-color: #E7D7EA;
 
   min-height: 100vh;
   display: grid;
@@ -45,4 +47,74 @@ body {
     background-color: var(--sidebar-selected-color);
     color: black;
   }
+}
+
+.main {
+  padding: 14px 24px;
+  background-color: var(--main-background-color);
+}
+
+.sort-by-container {
+  margin-bottom: 12px;
+  text-align: end;
+
+  select {
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 2px 8px;
+  }
+}
+
+.section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.section {
+  --offset-side: 12px;
+
+  h2 {
+    font-size: 1.7rem;
+    font-weight: 500;
+    border-bottom: 1px solid grey;
+    padding-bottom: 4px;
+    padding-left: var(--offset-side);
+    margin-bottom: 12px;
+  }
+
+  ul {
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  li {
+    list-style: none;
+    display: grid;
+    grid-template: repeat(2, min-content) / 32px 1fr max-content;
+    padding: 10px var(--offset-side);
+
+    &:hover {
+      background-color: var(--section-hovered-color);
+    }
+  }
+
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  
+  [type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.project-tag {
+  grid-column: 2 / 3;
+  font-size: 0.85rem;
 }
