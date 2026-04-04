@@ -1,12 +1,14 @@
+import { nextWednesday } from 'date-fns';
 import './styles.css';
 
 class TodoItem {
-  constructor(title, description, dueDate, priority) {
+  constructor(title, description, dueDate, priority, projectId) {
     this.id = crypto.randomUUID();
     this.title = title;
     this.description = description;
     this.dueDate = new Date(dueDate);
     this.priority = priority;
+    this.projectId = projectId;
     this.completed = false;
   }
 
@@ -24,7 +26,7 @@ class Project {
   }
 
   addTodoItem(title, description, dueDate, priority) {
-    const todoItem = new TodoItem(title, description, dueDate, priority);
+    const todoItem = new TodoItem(title, description, dueDate, priority, this.id);
     this.todoItems.push(todoItem);
 
     // Return the todo item so that it can ge stored in a variable and easily accessed when using console
@@ -88,6 +90,37 @@ class Todo {
       })
     })
   }
+
+  static groupTodoItems(todoItems, propertyToGroupBy) {
+    const groups = [];
+
+    function createGroup(title) {
+      return {
+        title,
+        todoItems: [],
+      }
+    }
+
+    todoItems.forEach(item => {
+      // Find a group that has the same propertyToGroupBy's value as the current item
+      // If found, it will add the current item to the group. If not found, it will create a new group before adding the item
+      // For example, if the propertyToGroupBy is dueDate, it will find the group with title of current item's due date
+
+      // Turn the value into a string first. Otherwise, the comparison won't work
+      const value = String(item[propertyToGroupBy]);
+
+      const groupFound = groups.find(group => group.title === value);
+      if (groupFound) {
+        groupFound.todoItems.push(item);
+      } else {
+        const newGroup = createGroup(value);
+        newGroup.todoItems.push(item);
+        groups.push(newGroup);
+      }
+    });
+
+    return groups;
+  }
 }
 
 const todo = new Todo();
@@ -125,14 +158,27 @@ function renderSidebar() {
   });
 
   // Logics related to dropdown menu are implemented in css
-  // Here we just toggle the class 'open'
+  // Here we only have to toggle the class 'open'
   dropdownButton.addEventListener('click', e => {
     dropdownDiv.classList.toggle('open');
   });
 }
 
-function renderProjectPage(project) {
-  console.log('this works');
+function renderPage(title, groups) {
+  const headerH1 = document.querySelector('.header > h1');
+  const sectionContainerDiv = document.querySelector('.section-container');
+
+  headerH1.textContent = title;
+
+  
 }
 
 renderSidebar();
+
+window.todo = new Todo();
+window.Todo = Todo;
+
+window.p1 = window.todo.addProject('p1');
+let t1 = p1.addTodoItem('thing 1', 'some blah', '2020-01-03', 'low');
+let t2 = p1.addTodoItem('thing 2', 'tnersitnareio', '2020-01-03', 'medium');
+let t3 = p1.addTodoItem('thing 3', 'arsnetio', '2025-02-01', 'low');
