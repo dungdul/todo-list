@@ -104,28 +104,35 @@ function renderSidebar() {
   const dropdownButton = document.querySelector('.dropdown-button');
   const dropdownMenuDiv = document.querySelector('.dropdown-menu');
   
-  function createSidebarItem(project) {
+  function createMenuButton(project) {
     const button = document.createElement('button');
     button.classList.add('menu-button');
     button.textContent = project.title;
+    button.onclick = function() {renderProjectPage(project)};
 
     return button;
   }
 
-  const unarchivedProjects = todo.getUnarchivedProjects();
-  const archivedProjects = todo.getArchivedProjects();
-
-  unarchivedProjects.forEach(project => {
-    projectContainerDiv.append(createSidebarItem(project));
+  // Display each project in the sidebar as a clickable sidebar menu
+  // A project will go into a dropdown menu if it has been archived
+  todo.projects.forEach(project => {
+    const menuButton = createMenuButton(project);
+    if (!project.archived) {
+      projectContainerDiv.append(menuButton);
+    } else {
+      dropdownMenuDiv.append(menuButton);
+    }
   });
 
-  archivedProjects.forEach(project => {
-    dropdownMenuDiv.append(createSidebarItem(project));
-  });
-
+  // Logics related to dropdown menu are implemented in css
+  // Here we just toggle the class 'open'
   dropdownButton.addEventListener('click', e => {
     dropdownDiv.classList.toggle('open');
   });
+}
+
+function renderProjectPage(project) {
+  console.log('this works');
 }
 
 renderSidebar();
