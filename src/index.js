@@ -65,6 +65,14 @@ class Todo {
     return this.projects.find(currentProject => currentProject.id === projectId);
   }
 
+  getUnarchivedProjects() {
+    return this.projects.filter(project => project.archived === false);
+  }
+
+  getArchivedProjects() {
+    return this.projects.filter(project => project.archived === true);
+  }
+
   printTodoList() {
     this.projects.forEach((project, index) => {
       console.log(`Project ${index + 1}: ${project.title}`);
@@ -82,4 +90,42 @@ class Todo {
   }
 }
 
-window.todo = new Todo();
+const todo = new Todo();
+todo.addProject('test 1');
+todo.addProject('test 3');
+const p2 = todo.addProject('test 2');
+p2.toggleArchived();
+const p4 = todo.addProject('test 4');
+p4.toggleArchived();
+
+function renderSidebar() {
+  const projectContainerDiv = document.querySelector('.project-container');
+  const dropdownDiv = document.querySelector('.dropdown');
+  const dropdownButton = document.querySelector('.dropdown-button');
+  const dropdownMenuDiv = document.querySelector('.dropdown-menu');
+  
+  function createSidebarItem(project) {
+    const button = document.createElement('button');
+    button.classList.add('menu-button');
+    button.textContent = project.title;
+
+    return button;
+  }
+
+  const unarchivedProjects = todo.getUnarchivedProjects();
+  const archivedProjects = todo.getArchivedProjects();
+
+  unarchivedProjects.forEach(project => {
+    projectContainerDiv.append(createSidebarItem(project));
+  });
+
+  archivedProjects.forEach(project => {
+    dropdownMenuDiv.append(createSidebarItem(project));
+  });
+
+  dropdownButton.addEventListener('click', e => {
+    dropdownDiv.classList.toggle('open');
+  });
+}
+
+renderSidebar();

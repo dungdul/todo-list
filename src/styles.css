@@ -49,6 +49,42 @@ body {
   }
 }
 
+.dropdown {
+  --dropdown-button-gap: 0.5rem;
+
+  .dropdown-button::before {
+    content: '▷';
+    margin-right: var(--dropdown-button-gap);
+  }
+
+  .dropdown-menu {
+    /* Hidden by default */
+    display: none;
+  }
+}
+
+.dropdown.open {
+  .dropdown-button::before {
+    content: '▽';
+    margin-right: var(--dropdown-button-gap);
+  }
+
+  .dropdown-button {
+    background-color: var(--sidebar-selected-color);
+    color: black;
+  }
+
+  .dropdown-menu {
+    /* Display when the dropdown button is clicked */
+    display: block;
+    
+    .menu-button {
+      padding-left: calc(var(--sidebar-width) * 0.3);
+    }
+  }
+  
+}
+
 .main {
   padding: 28px 24px;
   background-color: var(--main-background-color);
