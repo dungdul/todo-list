@@ -127,12 +127,13 @@ function renderSidebar() {
   const dropdownDiv = document.querySelector('.dropdown');
   const dropdownButton = document.querySelector('.dropdown-button');
   const dropdownMenuDiv = document.querySelector('.dropdown-menu');
+  const groupBySelect = document.querySelector('#group-by');
   
   function createMenuButton(project) {
     const button = document.createElement('button');
     button.classList.add('menu-button');
     button.textContent = project.title;
-    button.onclick = function() {renderProjectPage(project)};
+    button.onclick = function() {renderPage(project.title, Todo.groupTodoItems(project.todoItems, groupBySelect.value))};
 
     return button;
   }
@@ -155,22 +156,19 @@ function renderSidebar() {
   });
 }
 
-function renderProjectPage(project) {
+function renderPage(title, groups) {
   const headerH1 = document.querySelector('.header > h1');
   const groupBySelect = document.querySelector('#group-by')
   const sectionContainerDiv = document.querySelector('.section-container');
 
-  headerH1.textContent = project.title;
+  headerH1.textContent = title;
   sectionContainerDiv.textContent = '';
-  
-  // Create a section from each group
+
+  // Create a section for a group
   // Each section has a h2 title and a ul that contains todo items
-  const groupBy = groupBySelect.value;
-  const groups = Todo.groupTodoItems(project.todoItems, groupBy)
-  groups.forEach(group => {
+  function createSection(group) {
     const sectionDiv = document.createElement('div');
     sectionDiv.classList.add('section');
-    sectionContainerDiv.append(sectionDiv);
 
     const sectionHeaderH2 = document.createElement('h2');
     sectionHeaderH2.textContent = group.title;
@@ -200,10 +198,16 @@ function renderProjectPage(project) {
       // Show priority or due date, depending on value of 'group by'
       // If items are grouped by due date, show priority, and vice versa
       const rightSideP = document.createElement('p');
-      rightSideP.textContent = groupBy === 'dueDate' ? `Priority: ${item.priority}` : item.dueDate;
+      rightSideP.textContent = groupBySelect.value === 'dueDate' ? `Priority: ${item.priority}` : item.dueDate;
       li.append(rightSideP);
-    })
-  })
+    });
+
+    return sectionDiv;
+  }
+
+  groups.forEach(group => {
+    sectionContainerDiv.append(createSection(group));
+  });
 }
 
 window.todo = new Todo();
@@ -219,4 +223,5 @@ window.p3 = window.todo.addProject('p3');
 window.p3.toggleArchived();
 
 renderSidebar();
-renderProjectPage(p1);
+let g1 = Todo.groupTodoItems(p1.todoItems, document.querySelector('#group-by').value);
+renderPage(p1.title, g1);
