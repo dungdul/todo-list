@@ -48,12 +48,23 @@ function addEventListenersToSidebar() {
   const dropdownDiv = document.querySelector('.dropdown');
   const projectButtons = document.querySelectorAll('.project-button');
 
+  function selectButton(buttonToSelect) {
+    // Clear 'selected' class from every button first
+    [upcomingButton, dropdownButton, ...projectButtons].forEach(button => {
+      button.classList.remove('selected');
+    })
+
+    // Add 'selected' class to the selected button
+    buttonToSelect.classList.add('selected');
+  }
+
   // Upcoming button will show todo items from every project that is not archived
   upcomingButton.addEventListener('click', e => {
     let allTodoItems = [];
     todo.getUnarchivedProjects().forEach(project => {
       allTodoItems = allTodoItems.concat(project.todoItems);
     });
+    selectButton(upcomingButton);
     renderPage('Upcoming', allTodoItems);
   })
 
@@ -68,6 +79,7 @@ function addEventListenersToSidebar() {
   projectButtons.forEach(button => {
     button.addEventListener('click', e => {
       const project = todo.getProject(button.dataset.projectId);
+      selectButton(button);
       renderPage(project.title, project.todoItems);
     })
   })
