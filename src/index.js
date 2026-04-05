@@ -124,16 +124,14 @@ class Todo {
 
 function renderSidebar() {
   const projectContainerDiv = document.querySelector('.project-container');
-  const dropdownDiv = document.querySelector('.dropdown');
-  const dropdownButton = document.querySelector('.dropdown-button');
   const dropdownMenuDiv = document.querySelector('.dropdown-menu');
-  const groupBySelect = document.querySelector('#group-by');
   
   function createMenuButton(project) {
     const button = document.createElement('button');
-    button.classList.add('menu-button');
+    button.classList.add('menu-button', 'project-button');
     button.textContent = project.title;
-    button.onclick = function() {renderPage(project.title, Todo.groupTodoItems(project.todoItems, groupBySelect.value))};
+    // Project id will be used to get the project when user click then button
+    button.dataset.projectId = project.id;
 
     return button;
   }
@@ -148,15 +146,40 @@ function renderSidebar() {
       dropdownMenuDiv.append(menuButton);
     }
   });
+}
 
+function addEventListenersToSidebar() {
+  const upcomingButton = document.querySelector('#upcoming');
+  const dropdownButton = document.querySelector('.dropdown-button');
+  const dropdownDiv = document.querySelector('.dropdown');
+  const projectButtons = document.querySelectorAll('.project-button');
+
+  // Upcoming button will show todo items from every project that is not archived
+  upcomingButton.addEventListener('click', e => {
+    let allTodoItems = [];
+    todo.getUnarchivedProjects().forEach(project => {
+      allTodoItems = allTodoItems.concat(project.todoItems);
+    });
+    renderPage('Upcoming', allTodoItems);
+  })
+
+  // Dropdown button
   // Logics related to dropdown menu are implemented in css
   // Here we only have to toggle the class 'open'
   dropdownButton.addEventListener('click', e => {
     dropdownDiv.classList.toggle('open');
   });
+
+  // Individual project button will show todo items from that project
+  projectButtons.forEach(button => {
+    button.addEventListener('click', e => {
+      const project = todo.getProject(button.dataset.projectId);
+      renderPage(project.title, project.todoItems);
+    })
+  })
 }
 
-function renderPage(title, groups) {
+function renderPage(title, todoItems) {
   const headerH1 = document.querySelector('.header > h1');
   const groupBySelect = document.querySelector('#group-by')
   const sectionContainerDiv = document.querySelector('.section-container');
@@ -164,8 +187,10 @@ function renderPage(title, groups) {
   headerH1.textContent = title;
   sectionContainerDiv.textContent = '';
 
-  // Create a section for a group
+  // Group todo items then create a section for each group
   // Each section has a h2 title and a ul that contains todo items
+  const groups = Todo.groupTodoItems(todoItems, groupBySelect.value);
+
   function createSection(group) {
     const sectionDiv = document.createElement('div');
     sectionDiv.classList.add('section');
@@ -222,6 +247,10 @@ window.p2 = window.todo.addProject('p2');
 window.p3 = window.todo.addProject('p3');
 window.p3.toggleArchived();
 
+let t21 = p2.addTodoItem('this is active', 'ntrseaistoreia', '2020-09-09', 'high');
+let t31 = p3.addTodoItem('this is archived', 'luy;f3pwfpluy', '2018-02-02', 'low');
+
 renderSidebar();
+addEventListenersToSidebar();
 let g1 = Todo.groupTodoItems(p1.todoItems, document.querySelector('#group-by').value);
-renderPage(p1.title, g1);
+renderPage(p1.title, p1.todoItems);
