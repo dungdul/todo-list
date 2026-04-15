@@ -1,5 +1,5 @@
 import todoList from './todo-controller.js';
-import {format} from 'date-fns';
+import {format, getMonth} from 'date-fns';
 import TrashBin from '../images/trash-bin-trash-svgrepo-com.svg';
 
 function renderSidebar() {
@@ -45,6 +45,7 @@ function renderPage(title, todoItems, showProject=false) {
     checkboxContainerDiv.classList.add('checkbox-container');
     const checkboxInput = document.createElement('input');
     checkboxInput.type = 'checkbox';
+    checkboxInput.checked = item.completed;
     checkboxContainerDiv.append(checkboxInput);
 
     // Text box. This includes title, description, and due date
@@ -91,48 +92,70 @@ function renderPage(title, todoItems, showProject=false) {
   });
 }
 
-function addEventListenersToSidebar() {
+function selectButton(buttonToSelect) {
+  const menuButtons = document.querySelectorAll('.menu-button');
+
+  // Clear 'selected' class from every button first
+  menuButtons.forEach(button => {
+    button.classList.remove('selected');
+  })
+
+  // Add 'selected' class to the selected button
+  buttonToSelect.classList.add('selected');
+}
+
+function addEventListenersToTopMenu() {
   const topMenuButtons = document.querySelectorAll('.top-menu > button');
   const homebutton = document.querySelector('#home');
   const todayButton = document.querySelector('#today');
   const upcomingButton = document.querySelector('#upcoming');
   const overdueButton = document.querySelector('#overdue');
   const completedButton = document.querySelector('#completed');
-  const projectButtons = document.querySelectorAll('.project-button');
 
-  function selectButton(buttonToSelect) {
-    // Clear 'selected' class from every button first
-    [...topMenuButtons, ...projectButtons].forEach(button => {
-      button.classList.remove('selected');
-    })
 
-    // Add 'selected' class to the selected button
-    buttonToSelect.classList.add('selected');
+  // Function to turn a date into 00:00 so that the date can be compared with another date
+  function normalizeDate(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
 
-  // Home page will show all todo items
+  // Home page will show all uncompleted todo items
   homebutton.addEventListener('click', e => {
     selectButton(homebutton);
-    renderPage('All Tasks', todoList.todoItems, true);
+    const todoItemsUncompleted = todoList.todoItems.filter(item => !item.completed);
+    renderPage('All uncompleted Tasks', todoItemsUncompleted, true);
   });
 
   // Today page will show that is due today
   todayButton.addEventListener('click', e => {
     selectButton(todayButton);
     const todoItemsToday = todoList.todoItems.filter(item => item.dueDate.toDateString() === new Date().toDateString());
-    renderPage('Tasks Due Today', todoItemsToday, false);
+    renderPage('Tasks Due Today', todoItemsToday, true);
   });
 
-  // Upcoming button will show todo items
+  // Upcoming page shows upcoming uncompletd todo items
   upcomingButton.addEventListener('click', e => {
-    let allTodoItems = [];
-    todoList.getUnarchivedProjects().forEach(project => {
-      allTodoItems = allTodoItems.concat(project.todoItems);
-    });
     selectButton(upcomingButton);
-    renderPage('Upcoming', allTodoItems);
+    const todoItemsUpcoming = todoList.todoItems.filter(item => normalizeDate(item.dueDate) >= normalizeDate(new Date()) && !item.completed);
+    renderPage('Upcoming', todoItemsUpcoming, true);
   })
 
+  overdueButton.addEventListener('click', e => {
+    selectButton(overdueButton);
+    const todoItemsOverdue = todoList.todoItems.filter(item => normalizeDate(item.dueDate) < normalizeDate(new Date()) && !item.completed);
+    renderPage('Overdue Tasks', todoItemsOverdue, true)
+  })
+
+  completedButton.addEventListener('click', e => {
+    selectButton(completedButton);
+    const todoItemsCompleted = todoList.todoItems.filter(item => item.completed);
+    renderPage('Completed Tasks', todoItemsCompleted, true)
+  })
+
+}
+
+function addEventListenersToProjectMenu() {
+  const projectButtons = document.querySelectorAll('.project-button');
+  
   // Individual project button will show todo items from that project
   projectButtons.forEach(button => {
     button.addEventListener('click', e => {
@@ -146,6 +169,7 @@ function addEventListenersToSidebar() {
 
 export function initializeDisplay() {
   renderSidebar();
-  addEventListenersToSidebar();
+  addEventListenersToTopMenu();
+  addEventListenersToProjectMenu();
   document.querySelector('#home').click();
 }
