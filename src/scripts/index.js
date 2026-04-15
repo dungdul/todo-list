@@ -5,6 +5,7 @@ import { initializeDisplay } from './display-controller.js';
 let p1 = todoList.addProject('Project 1');
 todoList.addTodoItem('task1', 'something', '2020-03-01', 'low', p1.id);
 todoList.addTodoItem("today's tasks", 'yahahaha', new Date(), 'medium');
+todoList.addTodoItem('old task', 'arstwfu', '2020-01-01', 'low')
 todoList.addTodoItem("urgent stuff", "anrsetinraieo", '2026-04-17', 'high', p1.id);
 let completedTask = todoList.addTodoItem('completed stuff', 'hayayaya', '2020-01-01', 'medium', p1.id);
 completedTask.toggleCompleted();

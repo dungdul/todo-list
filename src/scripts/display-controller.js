@@ -33,6 +33,21 @@ function renderPage(title, todoItems, showProject=false) {
   todoListUl.classList.add('todo-list');
   todoListContainerDiv.append(todoListUl);
 
+  // Sort todo items according to what is selected in the sort-by dropdown menu
+  // Sort by due date first, then if 'priority' is selected, bring the item with high priority to the top
+  todoItems.sort((a, b) => a.dueDate - b.dueDate);
+  if (sortBySelect.value === 'priority') {
+    const groups = {
+      high: [],
+      medium: [],
+      low: [],
+    };
+    todoItems.forEach(item => {
+      groups[item.priority].push(item);
+    });
+    todoItems = [...groups.high, ...groups.medium, ...groups.low];
+  }
+
   // Populate ul with todo items
   todoItems.forEach(item => {
     // The item will have a colored border according to its priority
@@ -105,7 +120,6 @@ function selectButton(buttonToSelect) {
 }
 
 function addEventListenersToTopMenu() {
-  const topMenuButtons = document.querySelectorAll('.top-menu > button');
   const homebutton = document.querySelector('#home');
   const todayButton = document.querySelector('#today');
   const upcomingButton = document.querySelector('#upcoming');
