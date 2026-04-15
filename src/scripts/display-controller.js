@@ -1,5 +1,6 @@
 import todoList from './todo-controller.js';
 import {format} from 'date-fns';
+import TrashBin from '../images/trash-bin-trash-svgrepo-com.svg';
 
 function renderSidebar() {
   const projectContainerDiv = document.querySelector('.project-container');
@@ -48,24 +49,40 @@ function renderPage(title, todoItems, showProject=false) {
     // Text box. This includes title, description, and due date
     const todoItemTextDiv = document.createElement('div');
     todoItemTextDiv.classList.add('todo-item-text');
-    const titleP = document.createElement('p');
-    titleP.textContent = item.title;
+    const titleH2 = document.createElement('h2');
+    titleH2.textContent = item.title;
     const descriptionP = document.createElement('p');
+    descriptionP.classList.add('description');
     descriptionP.textContent = item.description;
+    // Due date and project will go into the same line, so we need a flexbox container
+    const dueDateProjectDiv = document.createElement('div');
+    dueDateProjectDiv.classList.add('due-date-project-container');
     const dueDateP = document.createElement('p');
     dueDateP.textContent = format(item.dueDate, 'd MMM yyyy');
-    todoItemTextDiv.append(titleP, descriptionP, dueDateP);
+    dueDateProjectDiv.append(dueDateP);
+
+    todoItemTextDiv.append(titleH2, descriptionP, dueDateProjectDiv);
 
     // Append a project which the item is from if showProject=true
     if (showProject) {
       const projectP = document.createElement('p');
       if (item.projectId) {
         projectP.textContent = todoList.getProject(item.projectId).title;
-        todoItemTextDiv.append(projectP);
+        dueDateProjectDiv.append(projectP);
       }
     }
+
+    // Delete button
+    const deleteButtonContainerDiv = document.createElement('div');
+    deleteButtonContainerDiv.classList.add('delete-button-container');
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    const trashBinImage = new Image();
+    trashBinImage.src = TrashBin;
+    deleteButton.append(trashBinImage);
+    deleteButtonContainerDiv.append(deleteButton);
  
-    li.append(checkboxContainerDiv, todoItemTextDiv)
+    li.append(checkboxContainerDiv, todoItemTextDiv, deleteButtonContainerDiv)
   });
 }
 
