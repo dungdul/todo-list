@@ -35,8 +35,9 @@ function renderPage(title, todoItems, showProject=false) {
 
   // Populate ul with todo items
   todoItems.forEach(item => {
+    // The item will have a colored border according to its priority
     const li = document.createElement('li');
-    li.classList.add('todo-item');
+    li.classList.add('todo-item', `priority-${item.priority}`);
     todoListUl.append(li);
 
     // Checkbox
@@ -49,11 +50,15 @@ function renderPage(title, todoItems, showProject=false) {
     // Text box. This includes title, description, and due date
     const todoItemTextDiv = document.createElement('div');
     todoItemTextDiv.classList.add('todo-item-text');
+
+    // Title will be preceded by a colored border according to its priority
     const titleH2 = document.createElement('h2');
     titleH2.textContent = item.title;
+
     const descriptionP = document.createElement('p');
     descriptionP.classList.add('description');
     descriptionP.textContent = item.description;
+
     // Due date and project will go into the same line, so we need a flexbox container
     const dueDateProjectDiv = document.createElement('div');
     dueDateProjectDiv.classList.add('due-date-project-container');
