@@ -33,6 +33,7 @@ function addEventListenersToStaticElements() {
     selectButton(homebutton);
     const todoItemsUncompleted = todoList.todoItems.filter(item => !item.completed);
     renderPage('All uncompleted Tasks', todoItemsUncompleted, true);
+    addEventListenersToTodoItems();
   });
 
   // Today page will show that is due today
@@ -40,6 +41,7 @@ function addEventListenersToStaticElements() {
     selectButton(todayButton);
     const todoItemsToday = todoList.todoItems.filter(item => item.dueDate.toDateString() === new Date().toDateString());
     renderPage('Tasks Due Today', todoItemsToday, true);
+    addEventListenersToTodoItems();
   });
 
   // Upcoming page shows upcoming uncompletd todo items
@@ -47,18 +49,21 @@ function addEventListenersToStaticElements() {
     selectButton(upcomingButton);
     const todoItemsUpcoming = todoList.todoItems.filter(item => normalizeDate(item.dueDate) >= normalizeDate(new Date()) && !item.completed);
     renderPage('Upcoming', todoItemsUpcoming, true);
+    addEventListenersToTodoItems();
   })
 
   overdueButton.addEventListener('click', e => {
     selectButton(overdueButton);
     const todoItemsOverdue = todoList.todoItems.filter(item => normalizeDate(item.dueDate) < normalizeDate(new Date()) && !item.completed);
-    renderPage('Overdue Tasks', todoItemsOverdue, true)
+    renderPage('Overdue Tasks', todoItemsOverdue, true);
+    addEventListenersToTodoItems();
   })
 
   completedButton.addEventListener('click', e => {
     selectButton(completedButton);
     const todoItemsCompleted = todoList.todoItems.filter(item => item.completed);
-    renderPage('Completed Tasks', todoItemsCompleted, true)
+    renderPage('Completed Tasks', todoItemsCompleted, true);
+    addEventListenersToTodoItems();
   })
 
   sortBySelect.addEventListener('click', e => {
@@ -81,7 +86,21 @@ function addEventListenersToProjectMenu() {
   })
 }
 
+function addEventListenersToTodoItems() {
+  const deleteButtons = document.querySelectorAll('.delete-todo-button');
+
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', e => {
+      todoList.deleteTodoItem(button.dataset.todoItemId)
+
+      // Click selected menu button to trigger page rendering
+      document.querySelector('.selected').click();
+    })
+  })
+}
+
 export function initializeEventController() {
   addEventListenersToStaticElements();
   addEventListenersToProjectMenu();
+  addEventListenersToTodoItems();
 }

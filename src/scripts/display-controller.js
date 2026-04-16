@@ -97,7 +97,8 @@ function renderPage(title, todoItems, showProject=false) {
     const deleteButtonContainerDiv = document.createElement('div');
     deleteButtonContainerDiv.classList.add('delete-button-container');
     const deleteButton = document.createElement('button');
-    deleteButton.classList.add('delete-button');
+    deleteButton.classList.add('delete-todo-button');
+    deleteButton.dataset.todoItemId = item.id;
     const trashBinImage = new Image();
     trashBinImage.src = TrashBin;
     deleteButton.append(trashBinImage);
