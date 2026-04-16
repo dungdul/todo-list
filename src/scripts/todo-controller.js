@@ -52,6 +52,10 @@ class TodoList {
     return this.projects.find(project => project.id === projectId);
   }
 
+  getTodoItem(todoItemId) {
+    return this.todoItems.find(item => item.id === todoItemId);
+  }
+
   getTodoItemsFromProject(projectId) {
     return this.todoItems.filter(item => item.projectId === projectId);
   }

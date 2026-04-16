@@ -60,6 +60,8 @@ function renderPage(title, todoItems, showProject=false) {
     checkboxContainerDiv.classList.add('checkbox-container');
     const checkboxInput = document.createElement('input');
     checkboxInput.type = 'checkbox';
+    checkboxInput.dataset.todoItemId = item.id;
+    checkboxInput.classList.add('complete-status-checkbox');
     checkboxInput.checked = item.completed;
     checkboxContainerDiv.append(checkboxInput);
 

@@ -1,6 +1,7 @@
 import todoList from './todo-controller.js';
 import { renderSidebar, renderPage } from "./display-controller.js";
 
+// Helper function to 'select' a button when user clicks on it
 function selectButton(buttonToSelect) {
   const menuButtons = document.querySelectorAll('.menu-button');
 
@@ -11,6 +12,11 @@ function selectButton(buttonToSelect) {
 
   // Add 'selected' class to the selected button
   buttonToSelect.classList.add('selected');
+}
+
+// Helper function to clicked 'selected' button to trigger page rendering
+function reRenderPage() {
+  document.querySelector('.selected').click();
 }
 
 // This add event listeners to elements that don't change, which are top menu buttons and sort-by dropdown
@@ -87,14 +93,20 @@ function addEventListenersToProjectMenu() {
 }
 
 function addEventListenersToTodoItems() {
+  const checkboxes = document.querySelectorAll('.complete-status-checkbox');
   const deleteButtons = document.querySelectorAll('.delete-todo-button');
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('click', e => {
+      todoList.getTodoItem(checkbox.dataset.todoItemId).toggleCompleted();
+      reRenderPage();
+    })
+  })
 
   deleteButtons.forEach(button => {
     button.addEventListener('click', e => {
       todoList.deleteTodoItem(button.dataset.todoItemId)
-
-      // Click selected menu button to trigger page rendering
-      document.querySelector('.selected').click();
+      reRenderPage();
     })
   })
 }
