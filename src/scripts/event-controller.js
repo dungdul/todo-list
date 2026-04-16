@@ -88,6 +88,7 @@ function addEventListenersToProjectMenu() {
       const project = todoList.getProject(button.dataset.projectId);
       const todoItems = todoList.getTodoItemsFromProject(button.dataset.projectId);
       renderPage(project.title, todoItems, false);
+      addEventListenersToTodoItems();
     })
   })
 }
@@ -95,6 +96,11 @@ function addEventListenersToProjectMenu() {
 function addEventListenersToTodoItems() {
   const checkboxes = document.querySelectorAll('.complete-status-checkbox');
   const deleteButtons = document.querySelectorAll('.delete-todo-button');
+
+  // Elements related to delete dialog
+  const deleteConfirmationDialog = document.querySelector('#delete-confirmation-dialog');
+  const dialogHeader = document.querySelector('.dialog-header');
+  const dialogDeleteButton = document.querySelector('#delete');
 
   checkboxes.forEach(checkbox => {
     checkbox.addEventListener('click', e => {
@@ -105,8 +111,13 @@ function addEventListenersToTodoItems() {
 
   deleteButtons.forEach(button => {
     button.addEventListener('click', e => {
-      todoList.deleteTodoItem(button.dataset.todoItemId)
-      reRenderPage();
+      deleteConfirmationDialog.showModal();
+      dialogHeader.textContent = `Delete task "${todoList.getTodoItem(button.dataset.todoItemId).title}"?`;
+      dialogDeleteButton.addEventListener('click', e => {
+        todoList.deleteTodoItem(button.dataset.todoItemId)
+        deleteConfirmationDialog.close();
+        reRenderPage();
+      })
     })
   })
 }

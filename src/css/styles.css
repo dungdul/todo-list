@@ -145,3 +145,17 @@ select {
     padding: 2px;
   }
 }
+
+dialog {
+  border-radius: 10px;
+}
+
+.dialog-header {
+  font-size: 1.4rem;
+  margin-bottom: 18px;
+}
+
+.dialog-button-container {
+  display: flex;
+  justify-content: space-evenly;
+}
