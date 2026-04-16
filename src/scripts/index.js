@@ -1,6 +1,7 @@
 import '../css/styles.css';
 import todoList from './todo-controller.js';
-import { initializeDisplay } from './display-controller.js';
+import { renderSidebar } from './display-controller.js';
+import { initializeEventController } from './event-controller.js';
 
 let p1 = todoList.addProject('Project 1');
 todoList.addTodoItem('task1', 'something', '2020-03-01', 'low', p1.id);
@@ -12,4 +13,6 @@ completedTask.toggleCompleted();
 let cTodayTask = todoList.addTodoItem('completed today', 'arstneio', new Date(), 'low');
 cTodayTask.toggleCompleted();
 
-initializeDisplay();
+renderSidebar();
+initializeEventController();
+document.querySelector('#home').click();
