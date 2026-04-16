@@ -4,13 +4,13 @@ import { renderSidebar } from './display-controller.js';
 import { initializeEventController } from './event-controller.js';
 
 let p1 = todoList.addProject('Project 1');
-todoList.addTodoItem('task1', 'something', '2020-03-01', 'low', p1.id);
-todoList.addTodoItem("today's tasks", 'yahahaha', new Date(), 'medium');
-todoList.addTodoItem('old task', 'arstwfu', '2020-01-01', 'low')
-todoList.addTodoItem("urgent stuff", "anrsetinraieo", '2026-04-17', 'high', p1.id);
-let completedTask = todoList.addTodoItem('completed stuff', 'hayayaya', '2020-01-01', 'medium', p1.id);
+todoList.addTask('task1', 'something', '2020-03-01', 'low', p1.id);
+todoList.addTask("today's tasks", 'yahahaha', new Date(), 'medium');
+todoList.addTask('old task', 'arstwfu', '2020-01-01', 'low')
+todoList.addTask("urgent stuff", "anrsetinraieo", '2026-04-17', 'high', p1.id);
+let completedTask = todoList.addTask('completed stuff', 'hayayaya', '2020-01-01', 'medium', p1.id);
 completedTask.toggleCompleted();
-let cTodayTask = todoList.addTodoItem('completed today', 'arstneio', new Date(), 'low');
+let cTodayTask = todoList.addTask('completed today', 'arstneio', new Date(), 'low');
 cTodayTask.toggleCompleted();
 
 renderSidebar();

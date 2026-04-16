@@ -24,10 +24,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
 
-.top-menu {
-  margin-top: 10vh;
+  > :first-child {
+    margin-top: 10vh;
+  }
 }
 
 .menu-button {
@@ -49,6 +49,17 @@ body {
   }
 }
 
+#new-task {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  > img {
+    width: 2rem;
+    filter: brightness(0) invert(1);
+  }
+}
+
 .main {
   padding: 28px 8px;
   background-color: var(--main-background-color);
@@ -61,15 +72,15 @@ body {
   margin-left: 18px;
 }
 
-select {
+select, input, textarea {
   background-color: white;
   border: 1px solid gray;
   border-radius: 8px;
   padding: 2px 8px;
+}
 
-  &:hover {
-    background-color: rgb(238, 238, 238);
-  }
+select:hover {
+  background-color: rgb(238, 238, 238);
 }
 
 .todo-list-container {
@@ -85,7 +96,7 @@ select {
   gap: 28px;
 }
 
-.todo-item {
+.task {
   list-style: none;
   border-radius: 6px;
   display: grid;
@@ -148,14 +159,36 @@ select {
 
 dialog {
   border-radius: 10px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 400px;
+
+    p {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+  }
 }
 
 .dialog-header {
   font-size: 1.4rem;
-  margin-bottom: 18px;
 }
 
 .dialog-button-container {
   display: flex;
   justify-content: space-evenly;
+}
+
+#delete-confirmation-dialog {
+  .dialog-header {
+    margin-bottom: 18px;
+  } 
 }

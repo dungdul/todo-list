@@ -7,6 +7,48 @@
 </head>
 <body>
   <div class="sidebar">
+    <div class="new-task-button-container">
+      <button class="menu-button" id="new-task" commandfor="task-dialog" command="show-modal">
+        <img src="./images/add-circle-svgrepo-com.svg" alt="New Task Icon">
+        <div>New Task</div>
+      </button>
+    </div>
+    <dialog id="task-dialog">
+      <form action="" method="dialog">
+        <input type="hidden" name="task-id" id="task-id">
+        <h1 class="dialog-header">New Task</h1>
+        <p>
+          <label for="task-title">Title</label>
+          <input type="text" id="task-title">
+        </p>
+        <p>
+          <label for="task-description">Description</label>
+          <textarea name="description" id="task-description"></textarea>
+        </p>
+        <p>
+          <label for="task-date">Date</label>
+          <input type="date" name="date" id="task-date">
+        </p>
+        <p>
+          <label for="task-priority">Priority</label>
+          <select name="priority" id="task-priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </p>
+        <p>
+          <label for="task-project-id">Project</label>
+          <select name="project" id="task-project-id">
+            <option value="">None</option>
+          </select>
+        </p>
+        <div class="dialog-button-container">
+          <button class="cancel-button" type="button" commandfor="task-dialog" command="close">Cancel</button>
+          <button class="confirm-button">Confirm</button>
+        </div>
+      </form>
+    </dialog>
     <div class="top-menu">
       <button class="menu-button" id="home">Home</button>
       <button class="menu-button" id="today">Today</button>

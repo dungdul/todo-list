@@ -1,4 +1,4 @@
-class TodoItem {
+class Task {
   constructor(title, description, dueDate, priority, projectId) {
     this.id = crypto.randomUUID();
     this.title = title;
@@ -12,6 +12,14 @@ class TodoItem {
   toggleCompleted() {
     this.completed = !this.completed;
   }
+
+  updateValues(title, description, dueDate, priority, projectId) {
+    this.title = title;
+    this.description = description;
+    this.dueDate = new Date(dueDate);
+    this.priority = priority;
+    this.projectId = projectId;
+  }
 }
 
 class Project {
@@ -23,7 +31,7 @@ class Project {
 
 class TodoList {
   constructor() {
-    this.todoItems = [];
+    this.tasks = [];
     this.projects = [];
   }
 
@@ -34,30 +42,30 @@ class TodoList {
   }
 
   deleteProject(projectId) {
-    this.projects = this.projects.filter(item => item.id !== projectId);
-    this.todoItems = this.todoItems.filter(item => item.projectId !== projectId);
+    this.projects = this.projects.filter(task => task.id !== projectId);
+    this.tasks = this.tasks.filter(task => task.projectId !== projectId);
   }
 
-  addTodoItem(title, description, dueDate, priority, projectId=null) {
-    const todoItem = new TodoItem(title, description, dueDate, priority, projectId);
-    this.todoItems.push(todoItem);
-    return todoItem;
+  addTask(title, description, dueDate, priority, projectId=null) {
+    const task = new Task(title, description, dueDate, priority, projectId);
+    this.tasks.push(task);
+    return task;
   }
 
-  deleteTodoItem(todoItemId) {
-    this.todoItems = this.todoItems.filter(currentItem => currentItem.id !== todoItemId);
+  deleteTask(taskId) {
+    this.tasks = this.tasks.filter(currentItem => currentItem.id !== taskId);
   }
 
   getProject(projectId) {
     return this.projects.find(project => project.id === projectId);
   }
 
-  getTodoItem(todoItemId) {
-    return this.todoItems.find(item => item.id === todoItemId);
+  getTask(taskId) {
+    return this.tasks.find(task => task.id === taskId);
   }
 
-  getTodoItemsFromProject(projectId) {
-    return this.todoItems.filter(item => item.projectId === projectId);
+  getTasksFromProject(projectId) {
+    return this.tasks.filter(task => task.projectId === projectId);
   }
 }
 
