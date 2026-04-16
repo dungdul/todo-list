@@ -119,12 +119,14 @@ function selectButton(buttonToSelect) {
   buttonToSelect.classList.add('selected');
 }
 
-function addEventListenersToTopMenu() {
+// This add event listeners to elements that don't change, which are top menu buttons and sort-by dropdown
+function addEventListenersToStaticElements() {
   const homebutton = document.querySelector('#home');
   const todayButton = document.querySelector('#today');
   const upcomingButton = document.querySelector('#upcoming');
   const overdueButton = document.querySelector('#overdue');
   const completedButton = document.querySelector('#completed');
+  const sortBySelect = document.querySelector('#sort-by');
 
 
   // Function to turn a date into 00:00 so that the date can be compared with another date
@@ -165,6 +167,10 @@ function addEventListenersToTopMenu() {
     renderPage('Completed Tasks', todoItemsCompleted, true)
   })
 
+  sortBySelect.addEventListener('click', e => {
+    // Get selected menu button. Then click that button to trigger rendering page
+    document.querySelector('.selected').click();
+  })
 }
 
 function addEventListenersToProjectMenu() {
@@ -183,7 +189,7 @@ function addEventListenersToProjectMenu() {
 
 export function initializeDisplay() {
   renderSidebar();
-  addEventListenersToTopMenu();
+  addEventListenersToStaticElements();
   addEventListenersToProjectMenu();
   document.querySelector('#home').click();
 }
