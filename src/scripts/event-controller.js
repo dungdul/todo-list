@@ -21,6 +21,14 @@ const overdueButton = document.querySelector('#overdue');
 const completedButton = document.querySelector('#completed');
 const sortBySelect = document.querySelector('#sort-by');
 
+// Elements related to project dialog
+const newProjectButton = document.querySelector('#new-project');
+const projectDialog = document.querySelector('#project-dialog');
+const projectIdInput = projectDialog.querySelector('#project-id');
+const projectTitleInput = projectDialog.querySelector('#project-title');
+const projectDialogCancelButton = projectDialog.querySelector('.cancel-button');
+const projectDialogConfirmButton = projectDialog.querySelector('.confirm-button');
+
 // Elements related to delete confirmation dialog
 const deleteDialog = document.querySelector('#delete-confirmation-dialog');
 const deleteDialogHeader = deleteDialog.querySelector('.dialog-header');
@@ -46,13 +54,18 @@ function reRenderPage() {
 }
 
 // Helper function to clear all input fields in the task dialog
-function clearInputFields() {
+function clearTaskInputFields() {
   taskIdInput.value = null;
   taskTitleInput.value = null;
   taskDescriptionInput.value = null;
   taskDateInput.value = null;
-  taskPriorityInput.value = null;
-  taskProjectIdInput.value = null;
+  taskPriorityInput.selectedIndex = 0;
+  taskProjectIdInput.selectedIndex = 0;
+}
+
+function clearProjectInputFields() {
+  projectIdInput.value = null;
+  projectTitleInput.value = null;
 }
 
 // This add event listeners to elements that don't change
@@ -64,7 +77,7 @@ function addEventListenersToStaticElements() {
 
   // Task dialog's cancel button will clear all input fields
   taskDialogCancelButton.addEventListener('click', e => {
-    clearInputFields();
+    clearTaskInputFields();
   })
 
   // Whether user add a new task or edit existing task, the new task dialog will be opened
@@ -88,9 +101,38 @@ function addEventListenersToStaticElements() {
       todoList.addTask(title, description, date, priority, projectId);
     }
 
-    clearInputFields();
+    clearTaskInputFields();
     taskDialog.close();
     reRenderPage();
+  });
+
+  // New-project button will clear the hidden project-id input field, so that when the form is submetted we know the user is adding a new project
+  newProjectButton.addEventListener('click', e => {
+    projectIdInput.value = null;
+  });
+
+  projectDialogCancelButton.addEventListener('click', e => {
+    clearProjectInputFields();
+  })
+
+  projectDialogConfirmButton.addEventListener('click', e => {
+    e.preventDefault();
+    
+    // Get values
+    const id = projectIdInput.value;
+    const title = projectTitleInput.value;
+
+    // If id is available, user is editting an existing project, otherwise, user is adding a new project
+    if (id) {
+      todoList.getProject(id).updateValues(title);
+    } else {
+      todoList.addProject(title);
+    }
+
+    clearProjectInputFields();
+    projectDialog.close();
+    renderProjectMenu();
+    addEventListenersToProjectMenu();
   })
 
   // Home page will show all uncompleted todo items

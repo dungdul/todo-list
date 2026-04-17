@@ -23,11 +23,17 @@ body {
   color: white;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 60px;
 
   > :first-child {
     margin-top: 10vh;
   }
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .menu-button {
@@ -49,7 +55,7 @@ body {
   }
 }
 
-#new-task {
+#new-task, #new-project {
   display: flex;
   gap: 8px;
   align-items: center;

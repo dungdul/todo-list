@@ -7,57 +7,79 @@
 </head>
 <body>
   <div class="sidebar">
-    <div class="new-task-button-container">
-      <button class="menu-button" id="new-task" commandfor="task-dialog" command="show-modal">
-        <img src="./images/add-circle-svgrepo-com.svg" alt="New Task Icon">
-        <div>New Task</div>
-      </button>
+    <div class="sidebar-section">
+      <div class="new-task-button-container">
+        <button class="menu-button" id="new-task" commandfor="task-dialog" command="show-modal">
+          <img src="./images/add-circle-svgrepo-com.svg" alt="New Task Icon">
+          <div>New Task</div>
+        </button>
+      </div>
+      <dialog id="task-dialog">
+        <form action="" method="dialog">
+          <input type="hidden" name="task-id" id="task-id">
+          <p>
+            <label for="task-title">Title</label>
+            <input type="text" id="task-title">
+          </p>
+          <p>
+            <label for="task-description">Description</label>
+            <textarea name="description" id="task-description"></textarea>
+          </p>
+          <p>
+            <label for="task-date">Date</label>
+            <input type="date" name="date" id="task-date">
+          </p>
+          <p>
+            <label for="task-priority">Priority</label>
+            <select name="priority" id="task-priority">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </p>
+          <p>
+            <label for="task-project-id">Project</label>
+            <select name="project" id="task-project-id">
+              <option value="" selected>None</option>
+            </select>
+          </p>
+          <div class="dialog-button-container">
+            <button class="cancel-button" type="button" commandfor="task-dialog" command="close">Cancel</button>
+            <button class="confirm-button">Confirm</button>
+          </div>
+        </form>
+      </dialog>
+      <div class="top-menu">
+        <button class="menu-button" id="home">Home</button>
+        <button class="menu-button" id="today">Today</button>
+        <button class="menu-button" id="upcoming">Upcoming</button>
+        <button class="menu-button" id="overdue">Overdue</button>
+        <button class="menu-button" id="completed">Completed</button>
+      </div>
     </div>
-    <dialog id="task-dialog">
-      <form action="" method="dialog">
-        <input type="hidden" name="task-id" id="task-id">
-        <h1 class="dialog-header">New Task</h1>
-        <p>
-          <label for="task-title">Title</label>
-          <input type="text" id="task-title">
-        </p>
-        <p>
-          <label for="task-description">Description</label>
-          <textarea name="description" id="task-description"></textarea>
-        </p>
-        <p>
-          <label for="task-date">Date</label>
-          <input type="date" name="date" id="task-date">
-        </p>
-        <p>
-          <label for="task-priority">Priority</label>
-          <select name="priority" id="task-priority">
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-        </p>
-        <p>
-          <label for="task-project-id">Project</label>
-          <select name="project" id="task-project-id">
-            <option value="" selected>None</option>
-          </select>
-        </p>
-        <div class="dialog-button-container">
-          <button class="cancel-button" type="button" commandfor="task-dialog" command="close">Cancel</button>
-          <button class="confirm-button">Confirm</button>
-        </div>
-      </form>
-    </dialog>
-    <div class="top-menu">
-      <button class="menu-button" id="home">Home</button>
-      <button class="menu-button" id="today">Today</button>
-      <button class="menu-button" id="upcoming">Upcoming</button>
-      <button class="menu-button" id="overdue">Overdue</button>
-      <button class="menu-button" id="completed">Completed</button>
-    </div>
-    <div class="project-menu">
-      <div class="project-container"></div>
+    <div class="sidebar-section">
+      <div class="new-project-button-container">
+        <button class="menu-button" id="new-project" commandfor="project-dialog" command="show-modal">
+          <img src="./images/add-circle-svgrepo-com.svg" alt="New Project Icon">
+          <div>New Project</div>
+        </button>
+      </div>
+      <dialog id="project-dialog">
+        <form action="">
+          <input type="hidden" name="project-id" id="project-id">
+          <p>
+            <label for="project-title">Title</label>
+            <input type="text" id="project-title">
+          </p>
+          <div class="dialog-button-container">
+            <button class="cancel-button" type="button" commandfor="project-dialog" command="close">Cancel</button>
+            <button class="confirm-button">Confirm</button>
+          </div>
+        </form>
+      </dialog>
+      <div class="project-menu">
+        <div class="project-container"></div>
+      </div>
     </div>
   </div>
   <div class="main">

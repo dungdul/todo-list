@@ -27,6 +27,10 @@ class Project {
     this.id = crypto.randomUUID();
     this.title = title;
   }
+
+  updateValues(title) {
+    this.title = title;
+  }
 }
 
 class TodoList {

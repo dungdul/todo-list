@@ -16,6 +16,13 @@ function renderProjectMenu() {
     return button;
   }
 
+  projectContainerDiv.textContent = '';
+  projectSelect.textContent = '';
+  const noneOption = document.createElement('option');
+  noneOption.textContent = 'None';
+  noneOption.selected = true;
+  projectSelect.append(noneOption);
+
   todoList.projects.forEach(project => {
     // Display each project in the sidebar as a clickable sidebar menu
     projectContainerDiv.append(createMenuButton(project));
