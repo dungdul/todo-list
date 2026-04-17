@@ -1,6 +1,25 @@
 import todoList from './todo-controller.js';
 import { renderProjectMenu, renderPage } from "./display-controller.js";
 
+// Elements related to task dialog
+const newTaskButton = document.querySelector('#new-task');
+const taskDialog = document.querySelector('#task-dialog');
+const taskDialogConfirmButton = taskDialog.querySelector('.confirm-button');
+
+// Top menu buttons
+const homebutton = document.querySelector('#home');
+const todayButton = document.querySelector('#today');
+const upcomingButton = document.querySelector('#upcoming');
+const overdueButton = document.querySelector('#overdue');
+const completedButton = document.querySelector('#completed');
+const sortBySelect = document.querySelector('#sort-by');
+
+// Elements related to delete confirmation dialog
+const deleteDialog = document.querySelector('#delete-confirmation-dialog');
+const deleteDialogHeader = deleteDialog.querySelector('.dialog-header');
+const deleteDialogCancelButton = deleteDialog.querySelector('.cancel-button');
+const deleteDialogConfirmButton = deleteDialog.querySelector('.confirm-button');
+
 // Helper function to 'select' a button when user clicks on it
 function selectButton(buttonToSelect) {
   const menuButtons = document.querySelectorAll('.menu-button');
@@ -21,19 +40,6 @@ function reRenderPage() {
 
 // This add event listeners to elements that don't change
 function addEventListenersToStaticElements() {
-  // Elements related to task dialog
-  const newTaskButton = document.querySelector('#new-task');
-  const taskDialog = document.querySelector('#task-dialog');
-  const taskDialogConfirmButton = taskDialog.querySelector('.confirm-button');
-
-  // Top menu buttons
-  const homebutton = document.querySelector('#home');
-  const todayButton = document.querySelector('#today');
-  const upcomingButton = document.querySelector('#upcoming');
-  const overdueButton = document.querySelector('#overdue');
-  const completedButton = document.querySelector('#completed');
-  const sortBySelect = document.querySelector('#sort-by');
-
   // New task button will clear task-id input field so that when the form is submitted, we know it is a new task
   newTaskButton.addEventListener('click', e => {
     document.querySelector('#task-id').value = null;
@@ -60,7 +66,6 @@ function addEventListenersToStaticElements() {
       todoList.addTask(title, description, date, priority, projectId);
     }
 
-    
     taskDialog.close();
     reRenderPage();
   })
@@ -122,29 +127,35 @@ function addEventListenersToTasks() {
   const checkboxes = document.querySelectorAll('.complete-status-checkbox');
   const deleteButtons = document.querySelectorAll('.delete-todo-button');
 
-  // Elements related to delete dialog
-  const deleteConfirmationDialog = document.querySelector('#delete-confirmation-dialog');
-  const dialogHeader = deleteConfirmationDialog.querySelector('.dialog-header');
-  const dialogDeleteButton = document.querySelector('#delete');
-
   checkboxes.forEach(checkbox => {
     checkbox.addEventListener('click', e => {
       todoList.getTask(checkbox.dataset.taskId).toggleCompleted();
       reRenderPage();
     })
-  })
+  });
+
+  // Function to be called when user click 'confirm' in delete confirmation dialog
+  function handleClickConfirmButton(e) {
+    todoList.deleteTask(e.target.dataset.taskId);
+    deleteDialog.close();
+    reRenderPage();
+  }
 
   deleteButtons.forEach(button => {
     button.addEventListener('click', e => {
-      deleteConfirmationDialog.showModal();
-      dialogHeader.textContent = `Delete task "${todoList.getTask(button.dataset.taskId).title}"?`;
-      dialogDeleteButton.addEventListener('click', e => {
-        todoList.deleteTask(button.dataset.taskId)
-        deleteConfirmationDialog.close();
-        reRenderPage();
-      })
-    })
-  })
+      deleteDialog.showModal();
+      deleteDialogHeader.textContent = `Delete task "${todoList.getTask(button.dataset.taskId).title}"?`;
+
+      // Pass on task-id to the confirm button so that handleClickConfirmButton knows which task to delete
+      deleteDialogConfirmButton.dataset.taskId = button.dataset.taskId;
+      deleteDialogConfirmButton.addEventListener('click', handleClickConfirmButton);
+
+      // Delete the event-listener from the confirm button if user click cancel
+      deleteDialogCancelButton.addEventListener('click', e => {
+        deleteDialogConfirmButton.removeEventListener('click', handleClickConfirmButton);
+      });
+    });
+  });
 }
 
 export function initializeEventController() {
