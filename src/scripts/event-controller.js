@@ -208,7 +208,28 @@ function addEventListenersToPageTitleButtons() {
     // Put project-id in the hidden input, so that projectDialogConfirmButton's event handler knows that user is editting an existing project
     projectIdInput.value = project.id;
     projectTitleInput.value = project.title;
+  })
 
+  function handleClickConfirmButton(e) {
+    todoList.deleteProject(e.target.dataset.projectId);
+    deleteDialog.close();
+    renderProjectMenu();
+    addEventListenersToProjectMenu();
+    homebutton.click();
+  }
+
+  deleteButton.addEventListener('click', e => {
+    deleteDialog.showModal();
+    deleteDialogHeader.textContent = `Delete project "${todoList.getProject(deleteButton.dataset.projectId).title}"?`;
+
+    // Pass on project-id to the confirm button so that handleClickConfirmButton knows which project to delete
+    deleteDialogConfirmButton.dataset.projectId = deleteButton.dataset.projectId;
+    deleteDialogConfirmButton.addEventListener('click', handleClickConfirmButton);
+
+    // Delete the event-listener from the confirm button if user click cancel
+    deleteDialogCancelButton.addEventListener('click', e => {
+      deleteDialogConfirmButton.removeEventListener('click', handleClickConfirmButton);
+    });
   })
 }
 
