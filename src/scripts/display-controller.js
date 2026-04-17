@@ -60,7 +60,10 @@ function renderPage(title, tasks, isProjectPage=false) {
     buttonContainerDiv.classList.add('icon-button-container');
     buttonContainerDiv.append(button);
 
-    return buttonContainerDiv;
+    return {
+      buttonContainerDiv,
+      button,
+    };
   }
 
   // If the page is a project page, add edit button and delete button for the project
@@ -68,10 +71,15 @@ function renderPage(title, tasks, isProjectPage=false) {
     // Get project-id from the selected menu button
     const projectId = document.querySelector('.selected').dataset.projectId;
 
-    pageTitleButtonContainerDiv.append(
-      createIconButton('projectId', projectId, EditIcon),
-      createIconButton('projectId', projectId, DeleteIcon),
-    );
+    // Edit button
+    const { buttonContainerDiv: editButtonContainerDiv, button: editButton } = createIconButton('projectId', projectId, EditIcon);
+    editButton.id = 'edit-project';
+
+    // Delete button
+    const { buttonContainerDiv: deleteButtonContainerDiv, button: deleteButton } = createIconButton('projectId', projectId, DeleteIcon);
+    deleteButton.id = 'delete-project';
+
+    pageTitleButtonContainerDiv.append(editButtonContainerDiv, deleteButtonContainerDiv);
   }
 
   const todoListUl = document.createElement('ul');
@@ -142,9 +150,10 @@ function renderPage(title, tasks, isProjectPage=false) {
     }
 
     // Delete button
-    const deleteButtonContainerDiv = createIconButton('taskId', task.id, DeleteIcon);
+    const { buttonContainerDiv, button } = createIconButton('taskId', task.id, DeleteIcon);
+    button.classList.add('delete-task-button');
  
-    li.append(checkboxContainerDiv, taskTextDiv, deleteButtonContainerDiv)
+    li.append(checkboxContainerDiv, taskTextDiv, buttonContainerDiv)
   });
 }
 

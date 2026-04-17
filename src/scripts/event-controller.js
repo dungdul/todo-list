@@ -191,7 +191,7 @@ function addEventListenersToProjectMenu() {
 function addEventListenersToTasks() {
   const taskLis = document.querySelectorAll('.task');
   const checkboxes = document.querySelectorAll('.complete-status-checkbox');
-  const deleteButtons = document.querySelectorAll('.delete-todo-button');
+  const deleteButtons = document.querySelectorAll('.delete-task-button');
 
   // When a task is clicked, task dialog will open, letting user edit the task
   taskLis.forEach(taskLi => {
