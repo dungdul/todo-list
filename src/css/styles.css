@@ -78,6 +78,16 @@ body {
   margin-left: 18px;
 }
 
+.page-title {
+  display: flex;
+  gap: 18px;
+}
+
+.page-title-button-container {
+  display: flex;
+  gap: 12px;
+}
+
 select, input, textarea {
   background-color: white;
   border: 1px solid gray;
@@ -149,7 +159,7 @@ select:hover {
   justify-content: space-between;
 }
 
-.delete-button-container {
+.icon-button-container {
   display: flex;
   justify-content: center;
   align-items: center;

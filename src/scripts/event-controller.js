@@ -138,33 +138,33 @@ function addEventListenersToStaticElements() {
   // Home page will show all uncompleted todo items
   homebutton.addEventListener('click', e => {
     selectButton(homebutton);
-    renderPage('All uncompleted Tasks', todoList.getUncompletedTasks(), true);
+    renderPage('All uncompleted Tasks', todoList.getUncompletedTasks());
     addEventListenersToTasks();
   });
 
   // Today page will show that is due today
   todayButton.addEventListener('click', e => {
     selectButton(todayButton);
-    renderPage('Tasks Due Today', todoList.getTodayTasks(), true);
+    renderPage('Tasks Due Today', todoList.getTodayTasks());
     addEventListenersToTasks();
   });
 
   // Upcoming page shows upcoming uncompletd todo items
   upcomingButton.addEventListener('click', e => {
     selectButton(upcomingButton);
-    renderPage('Upcoming', todoList.getUpcomingTasks(), true);
+    renderPage('Upcoming', todoList.getUpcomingTasks());
     addEventListenersToTasks();
   });
 
   overdueButton.addEventListener('click', e => {
     selectButton(overdueButton);
-    renderPage('Overdue Tasks', todoList.getOverdueTasks(), true);
+    renderPage('Overdue Tasks', todoList.getOverdueTasks());
     addEventListenersToTasks();
   });
 
   completedButton.addEventListener('click', e => {
     selectButton(completedButton);
-    renderPage('Completed Tasks', todoList.getCompletedTasks(), true);
+    renderPage('Completed Tasks', todoList.getCompletedTasks());
     addEventListenersToTasks();
   });
 
@@ -182,7 +182,7 @@ function addEventListenersToProjectMenu() {
       selectButton(button);
       const project = todoList.getProject(button.dataset.projectId);
       const tasks = todoList.getTasksFromProject(button.dataset.projectId);
-      renderPage(project.title, tasks, false);
+      renderPage(project.title, tasks, true);
       addEventListenersToTasks();
     })
   })

@@ -1,6 +1,7 @@
 import todoList from './todo-controller.js';
 import {format, getMonth} from 'date-fns';
-import TrashBin from '../images/trash-bin-trash-svgrepo-com.svg';
+import EditIcon from '../images/edit-svgrepo-com.svg';
+import DeleteIcon from '../images/trash-bin-trash-svgrepo-com.svg';
 
 function renderProjectMenu() {
   const projectContainerDiv = document.querySelector('.project-container');
@@ -37,13 +38,41 @@ function renderProjectMenu() {
   
 }
 
-function renderPage(title, tasks, showProject=false) {
-  const headerH1 = document.querySelector('.header > h1');
+function renderPage(title, tasks, isProjectPage=false) {
+  const pageTitleDiv = document.querySelector('.page-title');
+  const pageTitleH1 = pageTitleDiv.querySelector('h1');
+  const pageTitleButtonContainerDiv = pageTitleDiv.querySelector('.page-title-button-container');
   const sortBySelect = document.querySelector('#sort-by')
   const todoListContainerDiv = document.querySelector('.todo-list-container');
 
-  headerH1.textContent = title;
+  pageTitleH1.textContent = title;
+  pageTitleButtonContainerDiv.textContent = '';
   todoListContainerDiv.textContent = '';
+
+  // Helper function to create an icon button, i,e. edit button or delete button
+  function createIconButton(datasetProperty, datasetValue, imageSource) {
+    const button = document.createElement('button');
+    button.dataset[datasetProperty] = datasetValue;
+    const icon = new Image();
+    icon.src = imageSource;
+    button.append(icon);
+    const buttonContainerDiv = document.createElement('div');
+    buttonContainerDiv.classList.add('icon-button-container');
+    buttonContainerDiv.append(button);
+
+    return buttonContainerDiv;
+  }
+
+  // If the page is a project page, add edit button and delete button for the project
+  if (isProjectPage) {
+    // Get project-id from the selected menu button
+    const projectId = document.querySelector('.selected').dataset.projectId;
+
+    pageTitleButtonContainerDiv.append(
+      createIconButton('projectId', projectId, EditIcon),
+      createIconButton('projectId', projectId, DeleteIcon),
+    );
+  }
 
   const todoListUl = document.createElement('ul');
   todoListUl.classList.add('todo-list');
@@ -103,8 +132,8 @@ function renderPage(title, tasks, showProject=false) {
 
     taskTextDiv.append(titleH2, descriptionP, dueDateProjectDiv);
 
-    // Append a project which the task is from if showProject=true
-    if (showProject) {
+    // Append a project which the task is from if the page is not a project page
+    if (!isProjectPage) {
       const projectP = document.createElement('p');
       if (task.projectId) {
         projectP.textContent = todoList.getProject(task.projectId).title;
@@ -113,15 +142,7 @@ function renderPage(title, tasks, showProject=false) {
     }
 
     // Delete button
-    const deleteButtonContainerDiv = document.createElement('div');
-    deleteButtonContainerDiv.classList.add('delete-button-container');
-    const deleteButton = document.createElement('button');
-    deleteButton.classList.add('delete-todo-button');
-    deleteButton.dataset.taskId = task.id;
-    const trashBinImage = new Image();
-    trashBinImage.src = TrashBin;
-    deleteButton.append(trashBinImage);
-    deleteButtonContainerDiv.append(deleteButton);
+    const deleteButtonContainerDiv = createIconButton('taskId', task.id, DeleteIcon);
  
     li.append(checkboxContainerDiv, taskTextDiv, deleteButtonContainerDiv)
   });
