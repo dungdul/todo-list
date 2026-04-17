@@ -67,6 +67,31 @@ class TodoList {
   getTasksFromProject(projectId) {
     return this.tasks.filter(task => task.projectId === projectId);
   }
+
+  getUncompletedTasks() {
+    return this.tasks.filter(task => !task.completed);
+  }
+
+  getTodayTasks() {
+    return this.tasks.filter(task => task.dueDate.toDateString() === new Date().toDateString());
+  }
+
+  getUpcomingTasks() {
+    return this.tasks.filter(task => normalizeDate(task.dueDate) >= normalizeDate(new Date()) && !task.completed);
+  }
+
+  getOverdueTasks() {
+    return this.tasks.filter(task => normalizeDate(task.dueDate) < normalizeDate(new Date()) && !task.completed);
+  }
+
+  getCompletedTasks() {
+    return this.tasks.filter(task => task.completed);
+  }
+}
+
+// Helper function normalize date into the same time of the day, so that they can be compared
+function normalizeDate(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 export default new TodoList();

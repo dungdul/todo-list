@@ -1,5 +1,5 @@
 import todoList from './todo-controller.js';
-import { renderSidebar, renderPage } from "./display-controller.js";
+import { renderProjectMenu, renderPage } from "./display-controller.js";
 
 // Helper function to 'select' a button when user clicks on it
 function selectButton(buttonToSelect) {
@@ -33,11 +33,6 @@ function addEventListenersToStaticElements() {
   const overdueButton = document.querySelector('#overdue');
   const completedButton = document.querySelector('#completed');
   const sortBySelect = document.querySelector('#sort-by');
-
-  // Function to turn a date into 00:00 so that the date can be compared with another date
-  function normalizeDate(date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  }
 
   // New task button will clear task-id input field so that when the form is submitted, we know it is a new task
   newTaskButton.addEventListener('click', e => {
@@ -73,45 +68,39 @@ function addEventListenersToStaticElements() {
   // Home page will show all uncompleted todo items
   homebutton.addEventListener('click', e => {
     selectButton(homebutton);
-    const tasksUncompleted = todoList.tasks.filter(task => !task.completed);
-    renderPage('All uncompleted Tasks', tasksUncompleted, true);
+    renderPage('All uncompleted Tasks', todoList.getUncompletedTasks(), true);
     addEventListenersToTasks();
   });
 
   // Today page will show that is due today
   todayButton.addEventListener('click', e => {
     selectButton(todayButton);
-    const tasksToday = todoList.tasks.filter(task => task.dueDate.toDateString() === new Date().toDateString());
-    renderPage('Tasks Due Today', tasksToday, true);
+    renderPage('Tasks Due Today', todoList.getTodayTasks(), true);
     addEventListenersToTasks();
   });
 
   // Upcoming page shows upcoming uncompletd todo items
   upcomingButton.addEventListener('click', e => {
     selectButton(upcomingButton);
-    const tasksUpcoming = todoList.tasks.filter(task => normalizeDate(task.dueDate) >= normalizeDate(new Date()) && !task.completed);
-    renderPage('Upcoming', tasksUpcoming, true);
+    renderPage('Upcoming', todoList.getUpcomingTasks(), true);
     addEventListenersToTasks();
-  })
+  });
 
   overdueButton.addEventListener('click', e => {
     selectButton(overdueButton);
-    const tasksOverdue = todoList.tasks.filter(task => normalizeDate(task.dueDate) < normalizeDate(new Date()) && !task.completed);
-    renderPage('Overdue Tasks', tasksOverdue, true);
+    renderPage('Overdue Tasks', todoList.getOverdueTasks(), true);
     addEventListenersToTasks();
-  })
+  });
 
   completedButton.addEventListener('click', e => {
     selectButton(completedButton);
-    const tasksCompleted = todoList.tasks.filter(task => task.completed);
-    renderPage('Completed Tasks', tasksCompleted, true);
+    renderPage('Completed Tasks', todoList.getCompletedTasks(), true);
     addEventListenersToTasks();
-  })
+  });
 
   sortBySelect.addEventListener('click', e => {
-    // Get selected menu button. Then click that button to trigger rendering page
-    document.querySelector('.selected').click();
-  })
+    reRenderPage();
+  });
 }
 
 function addEventListenersToProjectMenu() {

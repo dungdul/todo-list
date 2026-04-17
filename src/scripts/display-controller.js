@@ -2,7 +2,7 @@ import todoList from './todo-controller.js';
 import {format, getMonth} from 'date-fns';
 import TrashBin from '../images/trash-bin-trash-svgrepo-com.svg';
 
-function renderSidebar() {
+function renderProjectMenu() {
   const projectContainerDiv = document.querySelector('.project-container');
   const projectSelect = document.querySelector('#task-project-id');
   
@@ -120,4 +120,4 @@ function renderPage(title, tasks, showProject=false) {
 }
 
 
-export {renderSidebar, renderPage}
+export {renderProjectMenu, renderPage}

@@ -1,6 +1,6 @@
 import '../css/styles.css';
 import todoList from './todo-controller.js';
-import { renderSidebar } from './display-controller.js';
+import { renderProjectMenu } from './display-controller.js';
 import { initializeEventController } from './event-controller.js';
 
 let p1 = todoList.addProject('Project 1');
@@ -13,6 +13,6 @@ completedTask.toggleCompleted();
 let cTodayTask = todoList.addTask('completed today', 'arstneio', new Date(), 'low');
 cTodayTask.toggleCompleted();
 
-renderSidebar();
+renderProjectMenu();
 initializeEventController();
 document.querySelector('#home').click();
