@@ -4,6 +4,13 @@ import { renderProjectMenu, renderPage } from "./display-controller.js";
 // Elements related to task dialog
 const newTaskButton = document.querySelector('#new-task');
 const taskDialog = document.querySelector('#task-dialog');
+const taskIdInput = taskDialog.querySelector('#task-id');
+const taskTitleInput = taskDialog.querySelector('#task-title');
+const taskDescriptionInput = taskDialog.querySelector('#task-description');
+const taskDateInput = taskDialog.querySelector('#task-date');
+const taskPriorityInput = taskDialog.querySelector('#task-priority');
+const taskProjectIdInput = taskDialog.querySelector('#task-project-id');
+const taskDialogCancelButton = taskDialog.querySelector('.cancel-button');
 const taskDialogConfirmButton = taskDialog.querySelector('.confirm-button');
 
 // Top menu buttons
@@ -38,11 +45,26 @@ function reRenderPage() {
   document.querySelector('.selected').click();
 }
 
+// Helper function to clear all input fields in the task dialog
+function clearInputFields() {
+  taskIdInput.value = null;
+  taskTitleInput.value = null;
+  taskDescriptionInput.value = null;
+  taskDateInput.value = null;
+  taskPriorityInput.value = null;
+  taskProjectIdInput.value = null;
+}
+
 // This add event listeners to elements that don't change
 function addEventListenersToStaticElements() {
   // New task button will clear task-id input field so that when the form is submitted, we know it is a new task
   newTaskButton.addEventListener('click', e => {
-    document.querySelector('#task-id').value = null;
+    taskIdInput.value = null;
+  })
+
+  // Task dialog's cancel button will clear all input fields
+  taskDialogCancelButton.addEventListener('click', e => {
+    clearInputFields();
   })
 
   // Whether user add a new task or edit existing task, the new task dialog will be opened
@@ -51,12 +73,12 @@ function addEventListenersToStaticElements() {
     e.preventDefault();
 
     // Get all input data
-    const id = document.querySelector('#task-id').value;
-    const title = document.querySelector('#task-title').value;
-    const description = document.querySelector('#task-description').value;
-    const date = document.querySelector('#task-date').value;
-    const priority = document.querySelector('#task-priority').value;
-    let projectId = document.querySelector('#task-project-id').value;
+    const id = taskIdInput.value;
+    const title = taskTitleInput.value;
+    const description = taskDescriptionInput.value;
+    const date = taskDateInput.value;
+    const priority = taskPriorityInput.value;
+    let projectId = taskProjectIdInput.value;
     projectId = projectId || null;
 
     // Add a new task or modify existing task based on whether task-id is specified or not
@@ -66,6 +88,7 @@ function addEventListenersToStaticElements() {
       todoList.addTask(title, description, date, priority, projectId);
     }
 
+    clearInputFields();
     taskDialog.close();
     reRenderPage();
   })
@@ -124,12 +147,32 @@ function addEventListenersToProjectMenu() {
 }
 
 function addEventListenersToTasks() {
+  const taskLis = document.querySelectorAll('.task');
   const checkboxes = document.querySelectorAll('.complete-status-checkbox');
   const deleteButtons = document.querySelectorAll('.delete-todo-button');
+
+  // When a task is clicked, task dialog will open, letting user edit the task
+  taskLis.forEach(taskLi => {
+    taskLi.addEventListener('click', e => {
+      taskDialog.showModal();
+      const task = todoList.getTask(taskLi.dataset.taskId);
+
+      // Put task-id in the hidden input, so that taskDialogConfirmButton's event handler knows that user is editting an existing task
+      taskIdInput.value = task.id;
+
+      // Populate input fields
+      taskTitleInput.value = task.title;
+      taskDescriptionInput.value = task.description;
+      taskDateInput.value = task.dueDate.toISOString().substring(0, 10);
+      taskPriorityInput.value = task.priority;
+      taskProjectIdInput.value = task.projectId;
+    })
+  })
 
   checkboxes.forEach(checkbox => {
     checkbox.addEventListener('click', e => {
       todoList.getTask(checkbox.dataset.taskId).toggleCompleted();
+      e.stopPropagation();
       reRenderPage();
     })
   });
@@ -154,6 +197,8 @@ function addEventListenersToTasks() {
       deleteDialogCancelButton.addEventListener('click', e => {
         deleteDialogConfirmButton.removeEventListener('click', handleClickConfirmButton);
       });
+
+      e.stopPropagation();
     });
   });
 }

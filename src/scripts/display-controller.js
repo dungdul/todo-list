@@ -62,6 +62,7 @@ function renderPage(title, tasks, showProject=false) {
     // The task will have a colored border according to its priority
     const li = document.createElement('li');
     li.classList.add('task', `priority-${task.priority}`);
+    li.dataset.taskId = task.id;
     todoListUl.append(li);
 
     // Checkbox
