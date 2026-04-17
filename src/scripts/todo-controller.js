@@ -46,7 +46,7 @@ class TodoList {
   }
 
   deleteProject(projectId) {
-    this.projects = this.projects.filter(task => task.id !== projectId);
+    this.projects = this.projects.filter(project => project.id !== projectId);
     this.tasks = this.tasks.filter(task => task.projectId !== projectId);
   }
 

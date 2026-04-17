@@ -106,35 +106,6 @@ function addEventListenersToStaticElements() {
     reRenderPage();
   });
 
-  // New-project button will clear the hidden project-id input field, so that when the form is submetted we know the user is adding a new project
-  newProjectButton.addEventListener('click', e => {
-    projectIdInput.value = null;
-  });
-
-  projectDialogCancelButton.addEventListener('click', e => {
-    clearProjectInputFields();
-  })
-
-  projectDialogConfirmButton.addEventListener('click', e => {
-    e.preventDefault();
-    
-    // Get values
-    const id = projectIdInput.value;
-    const title = projectTitleInput.value;
-
-    // If id is available, user is editting an existing project, otherwise, user is adding a new project
-    if (id) {
-      todoList.getProject(id).updateValues(title);
-    } else {
-      todoList.addProject(title);
-    }
-
-    clearProjectInputFields();
-    projectDialog.close();
-    renderProjectMenu();
-    addEventListenersToProjectMenu();
-  })
-
   // Home page will show all uncompleted todo items
   homebutton.addEventListener('click', e => {
     selectButton(homebutton);
@@ -168,6 +139,41 @@ function addEventListenersToStaticElements() {
     addEventListenersToTasks();
   });
 
+  // New-project button will clear the hidden project-id input field, so that when the form is submetted we know the user is adding a new project
+  newProjectButton.addEventListener('click', e => {
+    projectIdInput.value = null;
+  });
+
+  projectDialogCancelButton.addEventListener('click', e => {
+    clearProjectInputFields();
+  })
+
+  projectDialogConfirmButton.addEventListener('click', e => {
+    e.preventDefault();
+    
+    // Get values
+    let id = projectIdInput.value;
+    const title = projectTitleInput.value;
+
+    // If id is available, user is editting an existing project, otherwise, user is adding a new project
+    if (id) {
+      todoList.getProject(id).updateValues(title);
+    } else {
+      // Get the id so that it can be use later to select the project menu button
+      id = todoList.addProject(title).id;
+    }
+
+    clearProjectInputFields();
+    projectDialog.close();
+    renderProjectMenu();
+    // (Re)select the project button
+    // RenderProjectMenu() causes 'selected' class to disappear, resulting in reRenderPage() not working since there is no selected button to click
+    const projectButton = document.querySelector(`[data-project-id="${id}"]`);
+    selectButton(projectButton);
+    addEventListenersToProjectMenu();
+    reRenderPage();
+  })
+
   sortBySelect.addEventListener('click', e => {
     reRenderPage();
   });
@@ -183,8 +189,26 @@ function addEventListenersToProjectMenu() {
       const project = todoList.getProject(button.dataset.projectId);
       const tasks = todoList.getTasksFromProject(button.dataset.projectId);
       renderPage(project.title, tasks, true);
+      addEventListenersToPageTitleButtons();
       addEventListenersToTasks();
     })
+  })
+}
+
+// This adds event listeners to edit-project and delete-project buttons
+// This will be triggered when a project menu button is clicked, which triggers rendering a project page
+function addEventListenersToPageTitleButtons() {
+  const editButton = document.querySelector('#edit-project');
+  const deleteButton = document.querySelector('#delete-project');
+
+  editButton.addEventListener('click', e => {
+    projectDialog.showModal();
+    const project = todoList.getProject(editButton.dataset.projectId);
+
+    // Put project-id in the hidden input, so that projectDialogConfirmButton's event handler knows that user is editting an existing project
+    projectIdInput.value = project.id;
+    projectTitleInput.value = project.title;
+
   })
 }
 
