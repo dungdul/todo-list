@@ -3,10 +3,11 @@
 
 :root {
   font-family: Roboto, --sans-serif;
+  background-color: #181528;
 }
 
 body {
-  --sidebar-width: 250px;
+  --sidebar-width: 260px;
   --sidebar-color: #2E294E;
   --sidebar-selected-color: #EFBCD5;
   --sidebar-hovered-color: #BE97C6;
@@ -15,7 +16,10 @@ body {
 
   min-height: 100vh;
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-columns: var(--sidebar-width) minmax(400px, 1fr);
+  max-width: calc(var(--sidebar-width) + 1200px);
+  margin: 0 auto;
+  background-color: var(--body-background-color);
 }
 
 .sidebar {
@@ -24,6 +28,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 60px;
+
+  /* Make the sidebar sticky */
+  position: sticky;
+  top: 0px;
+  height: 100vh;
+  overflow-y: scroll;
 
   > :first-child {
     margin-top: 10vh;
@@ -42,7 +52,7 @@ body {
   border: none;
   width: 100%;
   text-align: start;
-  padding: 8px calc(var(--sidebar-width) * 0.2);
+  padding: 8px calc(var(--sidebar-width) * 0.16);
   font-size: 1.2rem;
 
   &:hover {
