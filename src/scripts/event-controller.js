@@ -1,5 +1,6 @@
 import todoList from './todo-controller.js';
 import { renderProjectMenu, renderPage } from "./display-controller.js";
+import * as storage from './storage-controller.js';
 
 // Elements related to task dialog
 const newTaskButton = document.querySelector('#new-task');
@@ -92,7 +93,7 @@ function addEventListenersToStaticElements() {
     const date = taskDateInput.value;
     const priority = taskPriorityInput.value;
     let projectId = taskProjectIdInput.value;
-    projectId = projectId || null;
+    projectId = projectId === 'None' ? null : projectId;
 
     // Add a new task or modify existing task based on whether task-id is specified or not
     if (id) {
@@ -101,6 +102,7 @@ function addEventListenersToStaticElements() {
       todoList.addTask(title, description, date, priority, projectId);
     }
 
+    storage.updateTasks(todoList.tasks);
     clearTaskInputFields();
     taskDialog.close();
     reRenderPage();
@@ -158,6 +160,7 @@ function addEventListenersToStaticElements() {
       id = todoList.addProject(title).id;
     }
 
+    storage.updateProjects(todoList.projects);
     clearProjectInputFields();
     projectDialog.close();
     renderProjectMenu();
@@ -204,6 +207,7 @@ function addEventListenersToPageTitleButtons() {
 
   function handleClickConfirmButton(e) {
     todoList.deleteProject(e.target.dataset.projectId);
+    storage.updateProjects(todoList.projects);
     deleteDialog.close();
     renderProjectMenu();
     homebutton.click();
@@ -250,6 +254,7 @@ function addEventListenersToTasks() {
   checkboxes.forEach(checkbox => {
     checkbox.addEventListener('click', e => {
       todoList.getTask(checkbox.dataset.taskId).toggleCompleted();
+      storage.updateTasks(todoList.tasks);
       e.stopPropagation();
       reRenderPage();
     })
@@ -258,6 +263,7 @@ function addEventListenersToTasks() {
   // Function to be called when user click 'confirm' in delete confirmation dialog
   function handleClickConfirmButton(e) {
     todoList.deleteTask(e.target.dataset.taskId);
+    storage.updateTasks(todoList.tasks);
     deleteDialog.close();
     reRenderPage();
   }
