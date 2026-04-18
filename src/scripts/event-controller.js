@@ -110,33 +110,28 @@ function addEventListenersToStaticElements() {
   homebutton.addEventListener('click', e => {
     selectButton(homebutton);
     renderPage('All uncompleted Tasks', todoList.getUncompletedTasks());
-    addEventListenersToTasks();
   });
 
   // Today page will show that is due today
   todayButton.addEventListener('click', e => {
     selectButton(todayButton);
     renderPage('Tasks Due Today', todoList.getTodayTasks());
-    addEventListenersToTasks();
   });
 
   // Upcoming page shows upcoming uncompletd todo items
   upcomingButton.addEventListener('click', e => {
     selectButton(upcomingButton);
     renderPage('Upcoming', todoList.getUpcomingTasks());
-    addEventListenersToTasks();
   });
 
   overdueButton.addEventListener('click', e => {
     selectButton(overdueButton);
     renderPage('Overdue Tasks', todoList.getOverdueTasks());
-    addEventListenersToTasks();
   });
 
   completedButton.addEventListener('click', e => {
     selectButton(completedButton);
     renderPage('Completed Tasks', todoList.getCompletedTasks());
-    addEventListenersToTasks();
   });
 
   // New-project button will clear the hidden project-id input field, so that when the form is submetted we know the user is adding a new project
@@ -170,7 +165,6 @@ function addEventListenersToStaticElements() {
     // RenderProjectMenu() causes 'selected' class to disappear, resulting in reRenderPage() not working since there is no selected button to click
     const projectButton = document.querySelector(`[data-project-id="${id}"]`);
     selectButton(projectButton);
-    addEventListenersToProjectMenu();
     reRenderPage();
   })
 
@@ -189,8 +183,6 @@ function addEventListenersToProjectMenu() {
       const project = todoList.getProject(button.dataset.projectId);
       const tasks = todoList.getTasksFromProject(button.dataset.projectId);
       renderPage(project.title, tasks, true);
-      addEventListenersToPageTitleButtons();
-      addEventListenersToTasks();
     })
   })
 }
@@ -214,7 +206,6 @@ function addEventListenersToPageTitleButtons() {
     todoList.deleteProject(e.target.dataset.projectId);
     deleteDialog.close();
     renderProjectMenu();
-    addEventListenersToProjectMenu();
     homebutton.click();
   }
 
@@ -290,8 +281,9 @@ function addEventListenersToTasks() {
   });
 }
 
-export function initializeEventController() {
-  addEventListenersToStaticElements();
-  addEventListenersToProjectMenu();
-  addEventListenersToTasks();
-}
+export {
+  addEventListenersToStaticElements,
+  addEventListenersToProjectMenu,
+  addEventListenersToPageTitleButtons,
+  addEventListenersToTasks,
+};

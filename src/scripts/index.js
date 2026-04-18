@@ -1,7 +1,7 @@
 import '../css/styles.css';
 import todoList from './todo-controller.js';
 import { renderProjectMenu } from './display-controller.js';
-import { initializeEventController } from './event-controller.js';
+import { addEventListenersToStaticElements } from './event-controller.js';
 
 let p1 = todoList.addProject('Project 1');
 todoList.addTask('task1', 'something', '2020-03-01', 'low', p1.id);
@@ -14,5 +14,5 @@ let cTodayTask = todoList.addTask('completed today', 'arstneio', new Date(), 'lo
 cTodayTask.toggleCompleted();
 
 renderProjectMenu();
-initializeEventController();
+addEventListenersToStaticElements();
 document.querySelector('#home').click();

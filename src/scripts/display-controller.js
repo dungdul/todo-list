@@ -1,4 +1,5 @@
 import todoList from './todo-controller.js';
+import { addEventListenersToProjectMenu, addEventListenersToPageTitleButtons, addEventListenersToTasks } from './event-controller.js';
 import {format, getMonth} from 'date-fns';
 import EditIcon from '../images/edit-svgrepo-com.svg';
 import DeleteIcon from '../images/trash-bin-trash-svgrepo-com.svg';
@@ -35,7 +36,7 @@ function renderProjectMenu() {
     projectSelect.append(option);
   });
 
-  
+  addEventListenersToProjectMenu();
 }
 
 function renderPage(title, tasks, isProjectPage=false) {
@@ -155,7 +156,9 @@ function renderPage(title, tasks, isProjectPage=false) {
  
     li.append(checkboxContainerDiv, taskTextDiv, buttonContainerDiv)
   });
+
+  if (isProjectPage) addEventListenersToPageTitleButtons();
+  addEventListenersToTasks();
 }
 
-
-export {renderProjectMenu, renderPage}
+export {renderProjectMenu, renderPage};
