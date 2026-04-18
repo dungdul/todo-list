@@ -208,6 +208,7 @@ function addEventListenersToPageTitleButtons() {
   function handleClickConfirmButton(e) {
     todoList.deleteProject(e.target.dataset.projectId);
     storage.updateProjects(todoList.projects);
+    storage.updateTasks(todoList.tasks);
     deleteDialog.close();
     renderProjectMenu();
     homebutton.click();
