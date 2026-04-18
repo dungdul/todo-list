@@ -77,11 +77,11 @@ class TodoList {
   }
 
   getTodayTasks() {
-    return this.tasks.filter(task => task.dueDate.toDateString() === new Date().toDateString());
+    return this.tasks.filter(task => task.dueDate.toDateString() === new Date().toDateString() && !task.completed);
   }
 
   getUpcomingTasks() {
-    return this.tasks.filter(task => normalizeDate(task.dueDate) >= normalizeDate(new Date()) && !task.completed);
+    return this.tasks.filter(task => normalizeDate(task.dueDate) > normalizeDate(new Date()) && !task.completed);
   }
 
   getOverdueTasks() {
